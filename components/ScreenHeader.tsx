@@ -1,10 +1,10 @@
-import { ArrowIcon } from "@/assets/svg/ArrowIcon";
-import { DividerIcon } from "@/assets/svg/DividerIcon";
-import { Logo } from "@/components/Logo";
+// import { ArrowIcon } from "@/assets/svg/ArrowIcon";
+// import { DividerIcon } from "@/assets/svg/DividerIcon";
+// import { Logo } from "@/components/Logo";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { Button, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { IconButton } from "./IconButton";
 
 interface HeaderProps {
@@ -31,21 +31,22 @@ export const ScreenHeader: React.FC<HeaderProps> = ({
 
   return (
     <View style={[styles.container, style]}>
-      {showBack ? (
+      {/* {showBack ? (
         <IconButton
           icon={<ArrowIcon rotation={180} width={10} height={20} />}
           onPress={handleBack}
           wrapperStyle={styles.sideButtonContainer}
         />
-      ) : null}
+      ) : null} */}
 
-      <Logo />
+      {/* <Logo />
       <IconButton
         icon={<DividerIcon />}
         onPress={handleDrawer}
         wrapperStyle={styles.iconWrapper}
         containerStyle={styles.button}
-      />
+      /> */}
+      <Button title="x" onPress={handleDrawer} />
     </View>
   );
 };

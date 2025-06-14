@@ -6,7 +6,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 export interface SectionItem {
   title: string;
   onPress: () => void;
-  icon: React.ReactNode;
+  // icon: React.ReactNode;
 }
 
 interface DrawerSectionProps {
@@ -28,7 +28,7 @@ export const DrawerSection: React.FC<DrawerSectionProps> = ({
         onPress={item.onPress}
         style={styles.linkContainer}
       >
-        <View style={styles.iconWrapper}>{item.icon}</View>
+        {/* <View style={styles.iconWrapper}>{item.icon}</View> */}
         <ThemedText variant="h3" style={styles.link}>
           {item.title}
         </ThemedText>
