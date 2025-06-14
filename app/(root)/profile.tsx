@@ -109,11 +109,11 @@ const Profile = () => {
               <Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
             ) : (
               <View style={[styles.avatar, styles.avatarBorder]}>
-                {/* <AvatarIcon
+                <AvatarIcon
                   width={130}
                   height={130}
                   fillColor={COLORS.BorderBlack}
-                /> */}
+                />
               </View>
             )}
 
@@ -233,8 +233,6 @@ const styles = StyleSheet.create({
     height: 24,
   },
   settingsText: {
-    // fontSize: 18,
-    // fontFamily: "Rubik-Medium",
     color: "#1A1A2C",
   },
   arrowIcon: {

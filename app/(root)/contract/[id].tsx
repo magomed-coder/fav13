@@ -13,9 +13,6 @@ import {
   ViewStyle,
 } from "react-native";
 
-// import { ArrowIcon } from "@/assets/svg/ArrowIcon";
-// import { CheckCircleIcon } from "@/assets/svg/CheckCircleIcon";
-// import { EmptyCircleIcon } from "@/assets/svg/EmptyCircleIcon";
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";

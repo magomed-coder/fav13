@@ -16,7 +16,7 @@ import { Linking, StyleSheet, View } from "react-native";
 interface SectionItem {
   title: string;
   onPress: () => void;
-  // icon: React.ReactNode;
+  icon: React.ReactNode;
 }
 
 export default function CustomDrawerContent({
@@ -32,18 +32,18 @@ export default function CustomDrawerContent({
           title: "Калькулятор",
           onPress: () =>
             Linking.openURL("https://favorit-today.ru/kalkulyator/"),
-          // icon: <CalculatorIcon />,
+          icon: <CalculatorIcon />,
         },
         {
           title: "О компании",
           onPress: () =>
             Linking.openURL("https://favorit-today.ru/o-kompanii/"),
-          // icon: <LocationIcon />,
+          icon: <LocationIcon />,
         },
         {
           title: "Контакты",
           onPress: () => navigation.navigate("contacts"),
-          // icon: <PhoneIcon />,
+          icon: <PhoneIcon />,
         },
       ],
     },
@@ -53,12 +53,12 @@ export default function CustomDrawerContent({
         {
           title: "Проекты",
           onPress: () => Linking.openURL("https://taplink.cc/favorit13"),
-          // icon: <FingerIcon />,
+          icon: <FingerIcon />,
         },
         {
           title: "Сайт компании",
           onPress: () => Linking.openURL("https://favorit-today.ru/"),
-          // icon: <ProjectIcon />,
+          icon: <ProjectIcon />,
         },
       ],
     },
@@ -67,10 +67,10 @@ export default function CustomDrawerContent({
   return (
     <View style={styles.container}>
       <View style={styles.containerLeft}>
-        {/* <ProfileHeader
+        <ProfileHeader
           onPress={() => navigation.navigate("profile")}
           user={user}
-        /> */}
+        />
 
         {sections.map((section, index) => (
           <DrawerSection
@@ -82,11 +82,11 @@ export default function CustomDrawerContent({
       </View>
 
       <View style={styles.containerRight}>
-        {/* <IconButton
+        <IconButton
           icon={<XIcon />}
           onPress={() => navigation.closeDrawer()}
           wrapperStyle={styles.iconXWrapper}
-        /> */}
+        />
       </View>
     </View>
   );
