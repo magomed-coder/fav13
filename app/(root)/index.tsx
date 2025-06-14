@@ -25,7 +25,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import images from "@/constants/images";
 import { getImageHeight } from "@/hooks/imageUtils";
-// import { LinearGradient } from "expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 
 const Home: React.FC = () => {
   const { user } = useGlobalContext();
@@ -74,7 +74,7 @@ const Home: React.FC = () => {
                 {user?.userNameInDevice}
               </ThemedText>
               <View>
-                {/* <LinearGradient
+                <LinearGradient
                   colors={[
                     COLORS.GradientStartLightGreen,
                     COLORS.GradientEndGreen,
@@ -82,7 +82,7 @@ const Home: React.FC = () => {
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.gradient}
-                /> */}
+                />
               </View>
             </View>
           </TouchableOpacity>

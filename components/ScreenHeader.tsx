@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Button, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { IconButton } from "./IconButton";
+import { Logo } from "./Logo";
 
 interface HeaderProps {
   /** Container style overrides */
@@ -38,8 +39,8 @@ export const ScreenHeader: React.FC<HeaderProps> = ({
           wrapperStyle={styles.sideButtonContainer}
         />
       ) : null} */}
-
-      {/* <Logo />
+      <Logo />
+      {/* 
       <IconButton
         icon={<DividerIcon />}
         onPress={handleDrawer}
