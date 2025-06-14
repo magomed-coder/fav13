@@ -33,8 +33,8 @@ const LoginPage = () => {
   useEffect(() => {
     if (!loading && isLogged) {
       if (!user?.userNameInDevice) {
-        // router.replace("/(root)/create-username");
-        Alert.alert("useEffect /(root)/create-username");
+        router.replace("/(root)/create-username");
+        // Alert.alert("useEffect /(root)/create-username");
       } else {
         router.replace("/");
       }
@@ -50,8 +50,8 @@ const LoginPage = () => {
         await refetch();
 
         if (!user?.userNameInDevice) {
-          // router.replace("/(root)/create-username");
-          Alert.alert("handleLogin /(root)/create-username");
+          router.replace("/(root)/create-username");
+          // Alert.alert("handleLogin /(root)/create-username");
           setIsLoading(false);
           return;
         }
