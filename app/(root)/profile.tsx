@@ -13,11 +13,12 @@ import { ScreenHeader } from "@/components/ScreenHeader";
 import { ThemedText } from "@/components/ThemedText";
 import icons from "@/constants/icons";
 import { COLORS } from "@/constants/theme";
-import { useGlobalContext } from "@/context/global-provider";
+
 import { authService } from "@/services/authService";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { useUserContext } from "@/context/user-provider";
 
 interface SettingsItemProp {
   icon: ImageSourcePropType;
@@ -49,12 +50,14 @@ const SettingsItem = ({
         {title}
       </ThemedText>
     </View>
-    {onPress && <Image source={icons.rightArrow} style={styles.arrowIcon} />}
+    {onPress && showArrow && (
+      <Image source={icons.rightArrow} style={styles.arrowIcon} />
+    )}
   </Pressable>
 );
 
 const Profile = () => {
-  const { user, refetch } = useGlobalContext();
+  const { user, refetch } = useUserContext();
 
   const handleLogout = async () => {
     const result = await authService.logout();

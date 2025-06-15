@@ -8,7 +8,8 @@ import { DrawerSection } from "@/components/Drawer/DrawerSection";
 import { ProfileHeader } from "@/components/Drawer/ProfileHeader";
 import { IconButton } from "@/components/IconButton";
 import { COLORS } from "@/constants/theme";
-import { useGlobalContext } from "@/context/global-provider";
+import { useUserContext } from "@/context/user-provider";
+
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
 import React from "react";
 import { Linking, StyleSheet, View } from "react-native";
@@ -22,7 +23,7 @@ interface SectionItem {
 export default function CustomDrawerContent({
   navigation,
 }: DrawerContentComponentProps) {
-  const { user } = useGlobalContext();
+  const { user } = useUserContext();
 
   const sections: { title: string; items: SectionItem[] }[] = [
     {

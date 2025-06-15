@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import {
-  Button,
   Dimensions,
   Image,
   Linking,
@@ -9,7 +8,6 @@ import {
   TouchableOpacity,
   View,
   useWindowDimensions,
-  Text,
 } from "react-native";
 import {
   SafeAreaView,
@@ -21,7 +19,6 @@ import { ScreenHeader } from "@/components/ScreenHeader";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { COLORS } from "@/constants/theme";
-import { useGlobalContext } from "@/context/global-provider";
 
 import ContractsSection from "@/components/HomePage/ContractsSection";
 import StatsSection from "@/components/HomePage/StatsSection";
@@ -32,10 +29,11 @@ import images from "@/constants/images";
 import { getImageHeight } from "@/hooks/imageUtils";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
-import { MaterialIcons } from "@expo/vector-icons";
+
+import { useUserContext } from "@/context/user-provider";
 
 const Home: React.FC = () => {
-  const { user } = useGlobalContext();
+  const { user } = useUserContext();
   const navigation = useNavigation<DrawerNavigationProp<any>>();
 
   const totalPaid =
@@ -191,14 +189,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
-    bottom: 80,
     zIndex: -1,
   },
   backgroundImage_2: {
     position: "absolute",
     left: 0,
     right: 0,
-    // bottom: 100,
     width: "100%",
     zIndex: -2,
   },

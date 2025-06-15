@@ -13,11 +13,11 @@ import { ThemedInput } from "@/components/ThemedInput";
 
 import { ThemedText } from "@/components/ThemedText";
 import { COLORS } from "@/constants/theme";
-import { useGlobalContext } from "@/context/global-provider";
 
 import { authService } from "@/services/authService";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useUserContext } from "@/context/user-provider";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -27,7 +27,7 @@ const LoginPage = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const { isLogged, user, loading, refetch } = useGlobalContext();
+  const { isLogged, user, loading, refetch } = useUserContext();
   const router = useRouter();
 
   useEffect(() => {

@@ -1,21 +1,17 @@
-import { useGlobalContext } from "@/context/global-provider";
 import { Redirect, withLayoutContext } from "expo-router";
 
 import SplashScreen, { SPLASH_DURATION_MS } from "@/components/SplashScreen";
 import CustomDrawerContent from "@/navigation/CustomDrawerContent";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+
 import { useEffect } from "react";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-// const { Navigator } = createDrawerNavigator();
-// const Drawer = withLayoutContext(Navigator);
+import { useUserContext } from "@/context/user-provider";
 
 export default function AppLayout() {
-  const { splashScreenDone, setsplashScreenDone, isLogged } =
-    useGlobalContext();
+  const { splashScreenDone, setsplashScreenDone, isLogged } = useUserContext();
 
   const insets = useSafeAreaInsets();
 

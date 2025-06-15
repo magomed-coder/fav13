@@ -15,7 +15,7 @@ import { ScreenHeader } from "@/components/ScreenHeader";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { COLORS } from "@/constants/theme";
-import { useGlobalContext } from "@/context/global-provider";
+
 import {
   extractResidentialComplex,
   formatDateWithYear,
@@ -33,6 +33,7 @@ import { EmptyCircleIcon } from "@/assets/svg/EmptyCircleIcon";
 import { ArrowIcon } from "@/assets/svg/ArrowIcon";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { useUserContext } from "@/context/user-provider";
 
 interface ContractData {
   contract?: Contract;
@@ -52,7 +53,7 @@ const ContractPage = () => {
   );
 
   const { id } = useLocalSearchParams<{ id?: string }>();
-  const { user } = useGlobalContext();
+  const { user } = useUserContext();
 
   const [data, setData] = useState<ContractData>({
     contract: undefined,

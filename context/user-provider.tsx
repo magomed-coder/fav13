@@ -9,7 +9,7 @@ import React, {
   useState,
 } from "react";
 
-interface GlobalContextType {
+interface UserContextType {
   isLogged: boolean;
   splashScreenDone: boolean;
   user: UserData | null;
@@ -19,13 +19,13 @@ interface GlobalContextType {
   setsplashScreenDone: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
-interface GlobalProviderProps {
+interface UserProviderProps {
   children: ReactNode;
 }
 
-export const GlobalProvider = ({ children }: GlobalProviderProps) => {
+export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(false);
   const [splashScreenDone, setsplashScreenDone] = useState(false);
@@ -42,7 +42,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
       });
     } catch (error) {
       setUser(null);
-      console.warn("[GlobalProvider] Failed to fetch user:", error);
+      console.warn("[UserProvider] Failed to fetch user:", error);
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const isLogged = !!user?.username;
 
   return (
-    <GlobalContext.Provider
+    <UserContext.Provider
       value={{
         isLogged,
         user,
@@ -72,13 +72,13 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
       }}
     >
       {children}
-    </GlobalContext.Provider>
+    </UserContext.Provider>
   );
 };
 
-export const useGlobalContext = (): GlobalContextType => {
-  const context = useContext(GlobalContext);
+export const useUserContext = (): UserContextType => {
+  const context = useContext(UserContext);
   if (!context)
-    throw new Error("useGlobalContext must be used within a GlobalProvider");
+    throw new Error("useUserContext must be used within a UserProvider");
   return context;
 };
