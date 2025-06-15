@@ -99,11 +99,7 @@ const Profile = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar
-        backgroundColor={COLORS.BGWhite}
-        style="dark"
-        translucent={false}
-      />
+      <StatusBar style="dark" />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}

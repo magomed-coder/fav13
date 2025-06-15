@@ -125,11 +125,7 @@ const ContractPage = () => {
 
   return (
     <SafeAreaView style={styles.pageContainer}>
-      <StatusBar
-        backgroundColor={COLORS.BGWhite}
-        style="dark"
-        translucent={false}
-      />
+      <StatusBar style="dark" />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <ScreenHeader showBack />

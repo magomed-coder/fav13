@@ -55,15 +55,10 @@ const Home: React.FC = () => {
     [width]
   );
   const insets = useSafeAreaInsets();
-  console.log(insets);
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar
-        backgroundColor={COLORS.BGWhite}
-        style="dark"
-        translucent={false}
-      />
+      <StatusBar style="dark" />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.containerScroll}

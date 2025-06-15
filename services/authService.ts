@@ -25,7 +25,6 @@ const login = async (username: string, password: string) => {
 const logout = async () => {
   try {
     await tokenService.clearTokens();
-    await AsyncStorage.clear();
     return true;
   } catch (error) {
     console.warn("[Logout cleanup failed]", error);

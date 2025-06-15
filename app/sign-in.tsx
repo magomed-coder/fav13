@@ -70,11 +70,7 @@ const LoginPage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar
-        backgroundColor={COLORS.BGWhite}
-        style="dark"
-        translucent={false}
-      />
+      <StatusBar style="dark" />
 
       <KeyboardAvoidingView
         style={styles.content}
