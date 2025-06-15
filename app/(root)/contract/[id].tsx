@@ -62,17 +62,6 @@ const ContractPage = () => {
     receipts: [],
   });
 
-  useEffect(() => {
-    if (user) {
-      setData(getContractData(id, user));
-
-      if (user.receipts.length > 0) {
-        const date0 = new Date(user.receipts[0].receipt_date);
-        setVisibleYear(date0.getFullYear().toString());
-      }
-    }
-  }, [id, user]);
-
   // Вызывается после того, как скролл «успокоился»
   const onMomentumScrollEnd = (
     event: NativeSyntheticEvent<NativeScrollEvent>
@@ -85,7 +74,7 @@ const ContractPage = () => {
       setVisibleYear(yearStr);
     }
   };
-
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
   const { contract, order, receipts, paymentcalendar } = data;
 
   const totalPaid =
@@ -118,6 +107,30 @@ const ContractPage = () => {
     () => buildPaymentCalendar(paymentcalendar, totalPaid, _avgMonthlyPayment),
     [paymentcalendar, totalPaid]
   );
+
+  useEffect(() => {
+    if (scrollRef.current && calendarMonths.length > 0) {
+      const now = new Date();
+      // Формируем ключ, как в CalendarMonth.monthKey, например "2025-06"
+      const currentKey = `${now.getFullYear()}-${String(
+        now.getMonth() + 1
+      ).padStart(2, "0")}`;
+      const idx = calendarMonths.findIndex((m) => m.monthKey === currentKey);
+      if (idx >= 0) {
+        const x = idx * RECEIPT_ITEM_WIDTH;
+        scrollRef.current.scrollTo({ x, animated: false });
+        // Устанавливаем visibleYear по найденному месяцу
+        setVisibleYear(currentKey.split("-")[0]);
+        setSelectedMonth(currentKey);
+      }
+    }
+  }, [calendarMonths]);
+
+  useEffect(() => {
+    if (user) {
+      setData(getContractData(id, user));
+    }
+  }, [id, user]);
 
   if (!contract || !order) {
     return <Text>Загрузка…</Text>;

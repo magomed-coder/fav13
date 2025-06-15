@@ -95,13 +95,13 @@ const ContactsPage = () => {
           </ThemedText>
         </View>
 
-        <View style={styles.mapSection}>
+        {/* <View style={styles.mapSection}>
           <ThemedText variant="m600.16" style={styles.mapTitle}>
             Посмотреть на карте
           </ThemedText>
 
           <Image source={images.map13} style={[styles.map]} />
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );
