@@ -28,11 +28,18 @@
       "expo-router",
       [
         "expo-splash-screen",
+
         {
           "image": "./assets/images/splash-icon-light.png",
+          "backgroundColor": "#91c3ee",
           "resizeMode": "contain",
           "imageWidth": 165,
-          "backgroundColor": "#233b50",
+
+          "dark": {
+            "image": "./assets/images/splash-icon-light.png",
+            "backgroundColor": "#233b50"
+          },
+
           "enableFullScreenImage_legacy": true
         }
       ],

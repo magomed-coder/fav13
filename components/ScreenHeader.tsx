@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     top: "50%",
+    paddingRight: 50,
   },
   iconWrapper: {
     position: "absolute",
