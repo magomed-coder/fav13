@@ -8,6 +8,7 @@ import { useEffect } from "react";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // const { Navigator } = createDrawerNavigator();
 // const Drawer = withLayoutContext(Navigator);
@@ -15,6 +16,8 @@ import { Drawer } from "expo-router/drawer";
 export default function AppLayout() {
   const { splashScreenDone, setsplashScreenDone, isLogged } =
     useGlobalContext();
+
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -44,6 +47,9 @@ export default function AppLayout() {
             borderBottomRightRadius: 0,
 
             overflow: "hidden",
+
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
           },
         }}
         drawerContent={(props) => <CustomDrawerContent {...props} />}

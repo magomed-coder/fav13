@@ -3,9 +3,7 @@ import {
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   Text,
   TextStyle,
   TouchableOpacity,
@@ -33,6 +31,8 @@ import styles from "./styles";
 import { CheckCircleIcon } from "@/assets/svg/CheckCircleIcon";
 import { EmptyCircleIcon } from "@/assets/svg/EmptyCircleIcon";
 import { ArrowIcon } from "@/assets/svg/ArrowIcon";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 interface ContractData {
   contract?: Contract;
@@ -124,8 +124,13 @@ const ContractPage = () => {
 
   return (
     <SafeAreaView style={styles.pageContainer}>
+      <StatusBar
+        backgroundColor={COLORS.BGWhite}
+        style="dark"
+        translucent={false}
+      />
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        <StatusBar backgroundColor={COLORS.BGWhite} barStyle="dark-content" />
         <ScreenHeader showBack />
 
         <ThemedText variant="h4" style={styles.mainTitle}>

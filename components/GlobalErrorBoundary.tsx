@@ -1,63 +1,60 @@
-import { useGlobalError } from "@/context/ErrorContext";
 import React from "react";
-import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { COLORS } from "@/constants/theme";
+import { ThemedText } from "./ThemedText";
+import { useRouter } from "expo-router";
+
+const { width } = Dimensions.get("window");
 
 type Props = { children: React.ReactNode };
 
 const GlobalErrorBoundary = ({ children }: Props) => {
-  const { error, setError } = useGlobalError();
+  const router = useRouter();
+
   const [hasLocalError, setHasLocalError] = React.useState(false);
-  const [localError, setLocalError] = React.useState<Error | null>(null);
 
-  // Обработчик для ошибок в компонентах
-  const handleComponentError = (error: Error) => {
-    setLocalError(error);
+  const handleComponentError = () => {
     setHasLocalError(true);
-    console.error("Component error:", error);
   };
-
-  // Обработчик для глобальных ошибок
-  React.useEffect(() => {
-    if (error) {
-      setLocalError(error);
-      setHasLocalError(true);
-    }
-  }, [error]);
 
   const reset = () => {
-    setError(null);
+    router.replace("/(root)");
     setHasLocalError(false);
-    setLocalError(null);
+    // Можно добавить логику перезагрузки приложения
   };
-
-  const errString = localError
-    ? JSON.stringify(
-        {
-          Error: localError,
-        },
-        null,
-        2
-      )
-    : "Неизвестная ошибка";
 
   if (hasLocalError) {
     return (
-      <View style={styles.container}>
-        <ScrollView style={styles.scroll}>
-          <Text style={styles.text}>Произошла ошибка:</Text>
-          <Text selectable style={styles.message}>
-            {localError?.message || "Неизвестная ошибка"}
-          </Text>
-          <Text selectable style={styles.message}>
-            {errString}
-          </Text>
-          <Button title="Перезагрузить" onPress={reset} />
-        </ScrollView>
-      </View>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.card}>
+          <MaterialIcons
+            name="error-outline"
+            size={64}
+            color={COLORS.TextRed}
+            style={styles.icon}
+          />
+          <Text style={styles.title}>Что-то пошло не так</Text>
+          <Text style={styles.subtitle}>Пожалуйста, попробуйте снова.</Text>
+
+          <TouchableOpacity style={styles.buttonContainer} onPress={reset}>
+            <ThemedText variant="m500.13" style={styles.buttonText}>
+              Перезапустить
+            </ThemedText>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     );
   }
 
-  // Оборачиваем дочерние компоненты в обработчик ошибок
   return (
     <ErrorBoundaryWrapper onError={handleComponentError}>
       {children}
@@ -65,9 +62,8 @@ const GlobalErrorBoundary = ({ children }: Props) => {
   );
 };
 
-// Вспомогательный компонент для обработки ошибок в дочерних компонентах
 class ErrorBoundaryWrapper extends React.Component<
-  { children: React.ReactNode; onError: (error: Error) => void },
+  { children: React.ReactNode; onError: () => void },
   { hasError: boolean }
 > {
   constructor(props: any) {
@@ -79,8 +75,8 @@ class ErrorBoundaryWrapper extends React.Component<
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error) {
-    this.props.onError(error);
+  componentDidCatch() {
+    this.props.onError();
   }
 
   render() {
@@ -89,15 +85,48 @@ class ErrorBoundaryWrapper extends React.Component<
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
+    backgroundColor: COLORS.BGWhite,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
+    padding: 16,
   },
-  scroll: { maxHeight: "50%", marginBottom: 20, width: "100%" },
-  text: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
-  message: { color: "crimson", marginBottom: 20 },
+  card: {
+    width: width * 0.9,
+    backgroundColor: COLORS.BGSlate,
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: COLORS.ShadowLight,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 6,
+    alignItems: "center",
+  },
+  icon: {
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: COLORS.TextBlack,
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: COLORS.TextBlack,
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  buttonContainer: {
+    width: "100%",
+    backgroundColor: COLORS.BGRed,
+    paddingVertical: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: { color: COLORS.TextWhite, textAlign: "center" },
 });
 
 export default GlobalErrorBoundary;

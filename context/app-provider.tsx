@@ -1,18 +1,21 @@
 import React from "react";
 import { DebugProvider } from "./debug-context";
 
-import { ErrorProvider } from "./ErrorContext";
 import { GlobalProvider } from "./global-provider";
 import { ToastProvider } from "./toast-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { ErrorProvider } from "./ErrorContext";
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ErrorProvider>
+    <SafeAreaProvider>
       <GlobalProvider>
-        <ToastProvider>
-          <DebugProvider>{children}</DebugProvider>
-        </ToastProvider>
+        <ErrorProvider>
+          <ToastProvider>
+            <DebugProvider>{children}</DebugProvider>
+          </ToastProvider>
+        </ErrorProvider>
       </GlobalProvider>
-    </ErrorProvider>
+    </SafeAreaProvider>
   );
 };

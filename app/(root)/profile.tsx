@@ -3,9 +3,7 @@ import {
   Image,
   ImageSourcePropType,
   Pressable,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   View,
 } from "react-native";
@@ -18,6 +16,8 @@ import { COLORS } from "@/constants/theme";
 import { useGlobalContext } from "@/context/global-provider";
 import { authService } from "@/services/authService";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 interface SettingsItemProp {
   icon: ImageSourcePropType;
@@ -96,11 +96,15 @@ const Profile = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <StatusBar
+        backgroundColor={COLORS.BGWhite}
+        style="dark"
+        translucent={false}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}
       >
-        <StatusBar backgroundColor={COLORS.BGWhite} barStyle="dark-content" />
         <ScreenHeader showBack />
 
         <View style={styles.avatarContainer}>

@@ -3,7 +3,6 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  StatusBar,
   StyleSheet,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,6 +17,7 @@ import { useGlobalContext } from "@/context/global-provider";
 
 import { authService } from "@/services/authService";
 import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -70,7 +70,12 @@ const LoginPage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={COLORS.BGWhite} barStyle="dark-content" />
+      <StatusBar
+        backgroundColor={COLORS.BGWhite}
+        style="dark"
+        translucent={false}
+      />
+
       <KeyboardAvoidingView
         style={styles.content}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -141,12 +146,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginPage;
-
-// @react-native-async-storage/async-storage
-// axios
-// @react-navigation/drawer//
-// expo-linear-gradient
-// react-native-svg
-
-// date-fns
-// react-native-vector-icons
