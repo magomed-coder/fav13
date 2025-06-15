@@ -26,10 +26,13 @@ import {
   getContractData,
 } from "@/lib/helpers";
 
-// import { CalendarMonth, buildPaymentCalendar } from "@/lib/contract.helpers";
+import { CalendarMonth, buildPaymentCalendar } from "@/lib/contract.helpers";
 import { Contract, Order, PaymentCalendarEntry, Receipt } from "@/types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./styles";
+import { CheckCircleIcon } from "@/assets/svg/CheckCircleIcon";
+import { EmptyCircleIcon } from "@/assets/svg/EmptyCircleIcon";
+import { ArrowIcon } from "@/assets/svg/ArrowIcon";
 
 interface ContractData {
   contract?: Contract;
@@ -70,17 +73,17 @@ const ContractPage = () => {
   }, [id, user]);
 
   // Вызывается после того, как скролл «успокоился»
-  // const onMomentumScrollEnd = (
-  //   event: NativeSyntheticEvent<NativeScrollEvent>
-  // ) => {
-  //   const x = event.nativeEvent.contentOffset.x;
-  //   const index = Math.round(x / RECEIPT_ITEM_WIDTH);
-  //   if (index >= 0 && index < calendarMonths.length) {
-  //     // monthKey = "2025-06", год можно вытащить через split или Date
-  //     const yearStr = calendarMonths[index].monthKey.split("-")[0];
-  //     setVisibleYear(yearStr);
-  //   }
-  // };
+  const onMomentumScrollEnd = (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => {
+    const x = event.nativeEvent.contentOffset.x;
+    const index = Math.round(x / RECEIPT_ITEM_WIDTH);
+    if (index >= 0 && index < calendarMonths.length) {
+      // monthKey = "2025-06", год можно вытащить через split или Date
+      const yearStr = calendarMonths[index].monthKey.split("-")[0];
+      setVisibleYear(yearStr);
+    }
+  };
 
   const { contract, order, receipts, paymentcalendar } = data;
 
@@ -110,15 +113,10 @@ const ContractPage = () => {
     }
   };
 
-  // const calendarMonths: CalendarMonth[] = useMemo(
-  //   () => buildPaymentCalendar(paymentcalendar, totalPaid, _avgMonthlyPayment),
-  //   [paymentcalendar, totalPaid]
-  // );
-
-  // console.log("DATA");
-  // console.log({ contract, order, receipts, paymentcalendar });
-
-  // console.log("calendarMonths", calendarMonths);
+  const calendarMonths: CalendarMonth[] = useMemo(
+    () => buildPaymentCalendar(paymentcalendar, totalPaid, _avgMonthlyPayment),
+    [paymentcalendar, totalPaid]
+  );
 
   if (!contract || !order) {
     return <Text>Загрузка…</Text>;
@@ -170,7 +168,7 @@ const ContractPage = () => {
           </ThemedText>
         </ThemedText>
 
-        {/* {calendarMonths.length > 0 ? (
+        {calendarMonths.length > 0 ? (
           <View style={styles.receiptsContainer}>
             <TouchableOpacity
               style={[styles.arrowButton, styles.leftArrow]}
@@ -209,7 +207,7 @@ const ContractPage = () => {
           </View>
         ) : (
           <ThemedText variant="h3">Квитанций не найдено.</ThemedText>
-        )} */}
+        )}
 
         <ThemedText variant="m600.12" style={styles.actualReceiptDataText}>
           {formatMonthYear()}

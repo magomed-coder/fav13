@@ -54,6 +54,7 @@ const ContractItem: React.FC<ContractItemProps> = ({
   name,
   bgColor,
 }) => (
+  // const residentialComplex = extractResidentialComplex(order?.nomenclature);
   <ThemedView style={[styles.contractItem, { backgroundColor: bgColor }]}>
     <ThemedText variant="h7" style={styles.contractBuildingName}>
       {name}

@@ -34,7 +34,6 @@ const LoginPage = () => {
     if (!loading && isLogged) {
       if (!user?.userNameInDevice) {
         router.replace("/(root)/create-username");
-        // Alert.alert("useEffect /(root)/create-username");
       } else {
         router.replace("/");
       }
@@ -51,7 +50,6 @@ const LoginPage = () => {
 
         if (!user?.userNameInDevice) {
           router.replace("/(root)/create-username");
-          // Alert.alert("handleLogin /(root)/create-username");
           setIsLoading(false);
           return;
         }
@@ -146,21 +144,9 @@ export default LoginPage;
 
 // @react-native-async-storage/async-storage
 // axios
-// @react-navigation/drawer
-//
+// @react-navigation/drawer//
 // expo-linear-gradient
 // react-native-svg
-// react-native-vector-icons
 
-// "dependencies": {
-//     "@expo/vector-icons": "^14.1.0",
-//     "@react-native-async-storage/async-storage": "2.1.2",
-//     "@react-navigation/bottom-tabs": "^7.3.10",
-//     "@react-navigation/drawer": "^7.4.1",
-//     "@react-navigation/elements": "^2.3.8",
-//     "@react-navigation/native": "^7.1.10",
-//     "axios": "^1.9.0",
-//     "date-fns": "^4.1.0",
-//     "expo-linear-gradient": "~14.1.5",
-//     "react-native-svg": "15.11.2",
-//     "react-native-vector-icons": "^10.2.0",
+// date-fns
+// react-native-vector-icons
