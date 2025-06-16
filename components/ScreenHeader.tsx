@@ -1,12 +1,11 @@
-// import { ArrowIcon } from "@/assets/svg/ArrowIcon";
-// import { DividerIcon } from "@/assets/svg/DividerIcon";
-// import { Logo } from "@/components/Logo";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Button, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { IconButton } from "./IconButton";
 import { Logo } from "./Logo";
+import { DividerIcon } from "@/assets/svg/DividerIcon";
+import { ArrowIcon } from "@/assets/svg/ArrowIcon";
 
 interface HeaderProps {
   /** Container style overrides */
@@ -32,22 +31,21 @@ export const ScreenHeader: React.FC<HeaderProps> = ({
 
   return (
     <View style={[styles.container, style]}>
-      {/* {showBack ? (
+      {showBack ? (
         <IconButton
           icon={<ArrowIcon rotation={180} width={10} height={20} />}
           onPress={handleBack}
           wrapperStyle={styles.sideButtonContainer}
         />
-      ) : null} */}
+      ) : null}
       <Logo />
-      {/* 
+
       <IconButton
         icon={<DividerIcon />}
         onPress={handleDrawer}
         wrapperStyle={styles.iconWrapper}
         containerStyle={styles.button}
-      /> */}
-      <Button title="x" onPress={handleDrawer} />
+      />
     </View>
   );
 };
@@ -61,6 +59,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     top: "50%",
+    paddingRight: 50,
   },
   iconWrapper: {
     position: "absolute",

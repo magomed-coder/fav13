@@ -3,7 +3,6 @@ import {
   Image,
   Linking,
   ScrollView,
-  StatusBar,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -15,6 +14,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { COLORS } from "@/constants/theme";
 
 import images from "@/constants/images";
+import { StatusBar } from "expo-status-bar";
 
 const ContactsPage = () => {
   const handlePhonePress = (phoneNumber: string) => {
@@ -28,9 +28,8 @@ const ContactsPage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar style="dark" />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <StatusBar backgroundColor={COLORS.BGWhite} barStyle="dark-content" />
-
         <ScreenHeader showBack style={styles.containerPaddingHorizontal} />
 
         <View style={styles.section}>
@@ -96,13 +95,13 @@ const ContactsPage = () => {
           </ThemedText>
         </View>
 
-        <View style={styles.mapSection}>
+        {/* <View style={styles.mapSection}>
           <ThemedText variant="m600.16" style={styles.mapTitle}>
             Посмотреть на карте
           </ThemedText>
 
           <Image source={images.map13} style={[styles.map]} />
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );

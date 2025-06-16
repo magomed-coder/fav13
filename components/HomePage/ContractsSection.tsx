@@ -4,12 +4,18 @@
 */
 import { ThemedText } from "@/components/ThemedText";
 import { COLORS } from "@/constants/theme";
-import { formatDateWithYear, getContractItemBgColor } from "@/lib/helpers";
-import { Contract } from "@/types";
+import {
+  extractResidentialComplex,
+  formatDateWithYear,
+  getContractData,
+  getContractItemBgColor,
+} from "@/lib/helpers";
+import { Contract, Order } from "@/types";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { ThemedView } from "../ThemedView";
+import { useUserContext } from "@/context/user-provider";
 interface Props {
   contracts: Contract[] | undefined;
 }
@@ -35,7 +41,7 @@ const ContractsSection: React.FC<Props> = ({ contracts = [] }) => {
               }}
               style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1.0 }]}
             >
-              <ContractItem {...contract} bgColor={bgColor} />
+              <ContractItem contract={contract} bgColor={bgColor} />
             </Pressable>
           );
         })}
@@ -44,37 +50,47 @@ const ContractsSection: React.FC<Props> = ({ contracts = [] }) => {
   );
 };
 
-interface ContractItemProps extends Contract {
+interface ContractItemProps {
   bgColor: string;
+  contract: Contract;
 }
 
-const ContractItem: React.FC<ContractItemProps> = ({
-  number,
-  date,
-  name,
-  bgColor,
-}) => (
-  <ThemedView style={[styles.contractItem, { backgroundColor: bgColor }]}>
-    <ThemedText variant="h7" style={styles.contractBuildingName}>
-      {name}
-    </ThemedText>
-    <View style={styles.contractDetailsContainer}>
-      <View style={styles.textContainer}>
-        <ThemedText variant="h5" style={styles.contractNumber}>
-          Договор {number}
-        </ThemedText>
-      </View>
+const ContractItem: React.FC<ContractItemProps> = ({ contract, bgColor }) => {
+  const { id, number, date } = contract;
+  const { user } = useUserContext();
+  const [order, setOrder] = useState<Order | null>(null);
 
-      <View style={styles.contractDivider} />
+  useEffect(() => {
+    if (user) {
+      const { order: currOreder } = getContractData(id.toString(), user);
+      if (currOreder) {
+        setOrder(currOreder);
+      }
+    }
+  }, [id, user]);
+  return (
+    <ThemedView style={[styles.contractItem, { backgroundColor: bgColor }]}>
+      <ThemedText variant="h7" style={styles.contractBuildingName}>
+        {extractResidentialComplex(order?.nomenclature)}
+      </ThemedText>
+      <View style={styles.contractDetailsContainer}>
+        <View style={styles.textContainer}>
+          <ThemedText variant="h5" style={styles.contractNumber}>
+            Договор {number}
+          </ThemedText>
+        </View>
 
-      <View style={styles.textContainer}>
-        <ThemedText variant="h5" style={styles.contractDate}>
-          От {formatDateWithYear(date)}
-        </ThemedText>
+        <View style={styles.contractDivider} />
+
+        <View style={styles.textContainer}>
+          <ThemedText variant="h5" style={styles.contractDate}>
+            От {formatDateWithYear(date)}
+          </ThemedText>
+        </View>
       </View>
-    </View>
-  </ThemedView>
-);
+    </ThemedView>
+  );
+};
 
 export default React.memo(ContractsSection);
 
@@ -115,7 +131,13 @@ const styles = StyleSheet.create({
     // Стили только для текста, ширина по контенту
   },
   contractDivider: {
+    // allow this element to grow when there’s extra space...
     flexGrow: 1,
+    // ...and also to shrink down if there isn’t enough.
+    flexShrink: 1,
+    // start from zero width rather than content size
+    flexBasis: 0,
+    // flex: 1,
     borderBottomWidth: 0.5,
     borderColor: COLORS.BorderBlack, // или ваш цвет из темы
     marginTop: 7, // Вертикальные отступы при необходимости

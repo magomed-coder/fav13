@@ -3,7 +3,6 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  StatusBar,
   StyleSheet,
   View,
 } from "react-native";
@@ -17,6 +16,7 @@ import { COLORS } from "@/constants/theme";
 
 import { authService } from "@/services/authService";
 import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 const ChangePasswordPage = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -70,10 +70,10 @@ const ChangePasswordPage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={COLORS.BGWhite} barStyle="dark-content" />
+      <StatusBar style="dark" />
       <KeyboardAvoidingView
         style={styles.content}
-        behavior={Platform.OS === "ios" ? "padding" : "position"}
+        behavior="padding"
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
       >
         <View style={styles.logoWrapper}>

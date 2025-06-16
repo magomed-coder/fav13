@@ -3,7 +3,6 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  StatusBar,
   StyleSheet,
   View,
 } from "react-native";
@@ -14,10 +13,11 @@ import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedInput } from "@/components/ThemedInput";
 
 import { COLORS } from "@/constants/theme";
-import { useGlobalContext } from "@/context/global-provider";
 
 import { userStorage } from "@/services/userService";
 import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useUserContext } from "@/context/user-provider";
 
 const CreateUserNamePage = () => {
   const [username, setUsername] = useState("");
@@ -25,7 +25,7 @@ const CreateUserNamePage = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const { isLogged, setUser } = useGlobalContext();
+  const { isLogged, setUser } = useUserContext();
   const router = useRouter();
 
   const handleSaveUserName = async () => {
@@ -52,10 +52,11 @@ const CreateUserNamePage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={COLORS.BGWhite} barStyle="dark-content" />
+      <StatusBar style="dark" />
+
       <KeyboardAvoidingView
         style={styles.content}
-        behavior={Platform.OS === "ios" ? "padding" : "position"}
+        behavior="padding"
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
       >
         <View style={styles.logoWrapper}>

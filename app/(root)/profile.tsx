@@ -3,9 +3,7 @@ import {
   Image,
   ImageSourcePropType,
   Pressable,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   View,
 } from "react-native";
@@ -15,9 +13,12 @@ import { ScreenHeader } from "@/components/ScreenHeader";
 import { ThemedText } from "@/components/ThemedText";
 import icons from "@/constants/icons";
 import { COLORS } from "@/constants/theme";
-import { useGlobalContext } from "@/context/global-provider";
+
 import { authService } from "@/services/authService";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
+import { useUserContext } from "@/context/user-provider";
 
 interface SettingsItemProp {
   icon: ImageSourcePropType;
@@ -49,12 +50,14 @@ const SettingsItem = ({
         {title}
       </ThemedText>
     </View>
-    {onPress && <Image source={icons.rightArrow} style={styles.arrowIcon} />}
+    {onPress && showArrow && (
+      <Image source={icons.rightArrow} style={styles.arrowIcon} />
+    )}
   </Pressable>
 );
 
 const Profile = () => {
-  const { user, refetch } = useGlobalContext();
+  const { user, refetch } = useUserContext();
 
   const handleLogout = async () => {
     const result = await authService.logout();
@@ -96,11 +99,11 @@ const Profile = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <StatusBar style="dark" />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}
       >
-        <StatusBar backgroundColor={COLORS.BGWhite} barStyle="dark-content" />
         <ScreenHeader showBack />
 
         <View style={styles.avatarContainer}>
@@ -109,11 +112,11 @@ const Profile = () => {
               <Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
             ) : (
               <View style={[styles.avatar, styles.avatarBorder]}>
-                {/* <AvatarIcon
+                <AvatarIcon
                   width={130}
                   height={130}
                   fillColor={COLORS.BorderBlack}
-                /> */}
+                />
               </View>
             )}
 
@@ -233,8 +236,6 @@ const styles = StyleSheet.create({
     height: 24,
   },
   settingsText: {
-    // fontSize: 18,
-    // fontFamily: "Rubik-Medium",
     color: "#1A1A2C",
   },
   arrowIcon: {

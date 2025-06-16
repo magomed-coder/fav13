@@ -3,9 +3,7 @@ import {
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   Text,
   TextStyle,
   TouchableOpacity,
@@ -13,14 +11,11 @@ import {
   ViewStyle,
 } from "react-native";
 
-// import { ArrowIcon } from "@/assets/svg/ArrowIcon";
-// import { CheckCircleIcon } from "@/assets/svg/CheckCircleIcon";
-// import { EmptyCircleIcon } from "@/assets/svg/EmptyCircleIcon";
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { COLORS } from "@/constants/theme";
-import { useGlobalContext } from "@/context/global-provider";
+
 import {
   extractResidentialComplex,
   formatDateWithYear,
@@ -29,10 +24,16 @@ import {
   getContractData,
 } from "@/lib/helpers";
 
-// import { CalendarMonth, buildPaymentCalendar } from "@/lib/contract.helpers";
+import { CalendarMonth, buildPaymentCalendar } from "@/lib/contract.helpers";
 import { Contract, Order, PaymentCalendarEntry, Receipt } from "@/types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./styles";
+import { CheckCircleIcon } from "@/assets/svg/CheckCircleIcon";
+import { EmptyCircleIcon } from "@/assets/svg/EmptyCircleIcon";
+import { ArrowIcon } from "@/assets/svg/ArrowIcon";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
+import { useUserContext } from "@/context/user-provider";
 
 interface ContractData {
   contract?: Contract;
@@ -52,7 +53,7 @@ const ContractPage = () => {
   );
 
   const { id } = useLocalSearchParams<{ id?: string }>();
-  const { user } = useGlobalContext();
+  const { user } = useUserContext();
 
   const [data, setData] = useState<ContractData>({
     contract: undefined,
@@ -61,30 +62,19 @@ const ContractPage = () => {
     receipts: [],
   });
 
-  useEffect(() => {
-    if (user) {
-      setData(getContractData(id, user));
-
-      if (user.receipts.length > 0) {
-        const date0 = new Date(user.receipts[0].receipt_date);
-        setVisibleYear(date0.getFullYear().toString());
-      }
-    }
-  }, [id, user]);
-
   // Вызывается после того, как скролл «успокоился»
-  // const onMomentumScrollEnd = (
-  //   event: NativeSyntheticEvent<NativeScrollEvent>
-  // ) => {
-  //   const x = event.nativeEvent.contentOffset.x;
-  //   const index = Math.round(x / RECEIPT_ITEM_WIDTH);
-  //   if (index >= 0 && index < calendarMonths.length) {
-  //     // monthKey = "2025-06", год можно вытащить через split или Date
-  //     const yearStr = calendarMonths[index].monthKey.split("-")[0];
-  //     setVisibleYear(yearStr);
-  //   }
-  // };
-
+  const onMomentumScrollEnd = (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => {
+    const x = event.nativeEvent.contentOffset.x;
+    const index = Math.round(x / RECEIPT_ITEM_WIDTH);
+    if (index >= 0 && index < calendarMonths.length) {
+      // monthKey = "2025-06", год можно вытащить через split или Date
+      const yearStr = calendarMonths[index].monthKey.split("-")[0];
+      setVisibleYear(yearStr);
+    }
+  };
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
   const { contract, order, receipts, paymentcalendar } = data;
 
   const totalPaid =
@@ -113,15 +103,34 @@ const ContractPage = () => {
     }
   };
 
-  // const calendarMonths: CalendarMonth[] = useMemo(
-  //   () => buildPaymentCalendar(paymentcalendar, totalPaid, _avgMonthlyPayment),
-  //   [paymentcalendar, totalPaid]
-  // );
+  const calendarMonths: CalendarMonth[] = useMemo(
+    () => buildPaymentCalendar(paymentcalendar, totalPaid, _avgMonthlyPayment),
+    [paymentcalendar, totalPaid]
+  );
 
-  // console.log("DATA");
-  // console.log({ contract, order, receipts, paymentcalendar });
+  useEffect(() => {
+    if (scrollRef.current && calendarMonths.length > 0) {
+      const now = new Date();
+      // Формируем ключ, как в CalendarMonth.monthKey, например "2025-06"
+      const currentKey = `${now.getFullYear()}-${String(
+        now.getMonth() + 1
+      ).padStart(2, "0")}`;
+      const idx = calendarMonths.findIndex((m) => m.monthKey === currentKey);
+      if (idx >= 0) {
+        const x = idx * RECEIPT_ITEM_WIDTH;
+        scrollRef.current.scrollTo({ x, animated: false });
+        // Устанавливаем visibleYear по найденному месяцу
+        setVisibleYear(currentKey.split("-")[0]);
+        setSelectedMonth(currentKey);
+      }
+    }
+  }, [calendarMonths]);
 
-  // console.log("calendarMonths", calendarMonths);
+  useEffect(() => {
+    if (user) {
+      setData(getContractData(id, user));
+    }
+  }, [id, user]);
 
   if (!contract || !order) {
     return <Text>Загрузка…</Text>;
@@ -129,8 +138,9 @@ const ContractPage = () => {
 
   return (
     <SafeAreaView style={styles.pageContainer}>
+      <StatusBar style="dark" />
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        <StatusBar backgroundColor={COLORS.BGWhite} barStyle="dark-content" />
         <ScreenHeader showBack />
 
         <ThemedText variant="h4" style={styles.mainTitle}>
@@ -173,7 +183,7 @@ const ContractPage = () => {
           </ThemedText>
         </ThemedText>
 
-        {/* {calendarMonths.length > 0 ? (
+        {calendarMonths.length > 0 ? (
           <View style={styles.receiptsContainer}>
             <TouchableOpacity
               style={[styles.arrowButton, styles.leftArrow]}
@@ -212,7 +222,7 @@ const ContractPage = () => {
           </View>
         ) : (
           <ThemedText variant="h3">Квитанций не найдено.</ThemedText>
-        )} */}
+        )}
 
         <ThemedText variant="m600.12" style={styles.actualReceiptDataText}>
           {formatMonthYear()}

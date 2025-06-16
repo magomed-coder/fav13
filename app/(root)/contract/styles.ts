@@ -73,10 +73,12 @@ const styles = StyleSheet.create({
   leftArrow: {
     left: 0,
     transform: [{ translateY: -14 }],
+    paddingRight: 30,
   },
   rightArrow: {
     right: 0,
     transform: [{ translateY: -14 }],
+    paddingLeft: 30,
   },
   actualReceiptDataText: {
     marginTop: 10,
