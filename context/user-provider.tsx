@@ -59,6 +59,9 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
   const isLogged = !!user?.username;
 
+  console.log("user");
+  console.log(user);
+
   return (
     <UserContext.Provider
       value={{
