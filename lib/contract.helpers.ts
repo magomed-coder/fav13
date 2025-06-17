@@ -1,6 +1,8 @@
 import {
+  addMonths,
   eachMonthOfInterval,
   format,
+  isAfter,
   isSameMonth,
   parseISO,
   startOfMonth,
@@ -33,10 +35,13 @@ export function buildPaymentCalendar(
   const today = new Date();
   const thisMonth = startOfMonth(today);
 
-  const scheduledMonths = eachMonthOfInterval({
-    start: startDate,
-    end: endDate,
-  });
+  // 2. Построение массива «каждый месяц в тот же день»
+  const scheduledMonths: Date[] = [];
+  let cursor = startDate;
+  while (!isAfter(cursor, endDate)) {
+    scheduledMonths.push(cursor);
+    cursor = addMonths(cursor, 1);
+  }
 
   // 2. Locate “current” month in the schedule
   let currentIdx = scheduledMonths.findIndex((dt) =>

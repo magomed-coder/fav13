@@ -105,7 +105,7 @@ const Home: React.FC = () => {
         resizeMode="cover"
         style={[
           styles.backgroundImage,
-          { width, height: imageHeight_1, bottom: insets.bottom + 80 },
+          { width, height: +imageHeight_1, bottom: insets.bottom + 80 },
         ]}
       />
       <Image
@@ -113,7 +113,7 @@ const Home: React.FC = () => {
         resizeMode="cover"
         style={[
           styles.backgroundImage_2,
-          { width, height: imageHeight_2, bottom: insets.bottom + 100 },
+          { width, height: +imageHeight_2, bottom: insets.bottom + 100 },
         ]}
       />
 

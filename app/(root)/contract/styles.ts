@@ -59,7 +59,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 1,
-    marginHorizontal: 9,
+    paddingHorizontal: 9,
+  },
+  receiptBadgeSelected: {
+    backgroundColor: COLORS.BGDarkBlue,
+    borderRadius: 5,
+  },
+  receiptMonthTextSelected: {
+    color: COLORS.TextWhite,
   },
   receiptMonthText: {
     textAlign: "center",

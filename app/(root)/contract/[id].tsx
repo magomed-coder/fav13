@@ -45,7 +45,7 @@ interface ContractData {
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const RECEIPT_ITEM_WIDTH = 21 + 9 * 2;
-const _avgMonthlyPayment = 80500;
+const _avgMonthlyPayment = 88000;
 
 const ContractPage = () => {
   const [visibleYear, setVisibleYear] = useState<string>(
@@ -74,7 +74,10 @@ const ContractPage = () => {
       setVisibleYear(yearStr);
     }
   };
-  const [selectedMonth, setSelectedMonth] = useState<string>("");
+  const [selectedMonth, setSelectedMonth] = useState<CalendarMonth | null>(
+    null
+  );
+
   const { contract, order, receipts, paymentcalendar } = data;
 
   const totalPaid =
@@ -88,6 +91,24 @@ const ContractPage = () => {
     : 0;
 
   const residentialComplex = extractResidentialComplex(order?.nomenclature);
+
+  // 2) разница
+  const paidDiff = totalPaid - Number(paymentcalendar?.due_now);
+
+  // 3) формируем строковое представление с разделителями
+  const formattedDiff = formatNumberRegex(Math.abs(paidDiff)) + " р.";
+
+  // 4) выбираем цвет
+  const diffColor =
+    paidDiff < 0
+      ? COLORS.TextRed
+      : paidDiff > 0 || paidDiff === 0
+      ? COLORS.TextGreen
+      : COLORS.TextRed;
+
+  // 5) подпись
+  const diffLabel =
+    paidDiff < 0 ? "Долг" : paidDiff > 0 ? "Переплата" : "Баланс";
 
   // Хук и реф для горизонтального скролла
   const scrollRef = useRef<ScrollView>(null);
@@ -121,7 +142,7 @@ const ContractPage = () => {
         scrollRef.current.scrollTo({ x, animated: false });
         // Устанавливаем visibleYear по найденному месяцу
         setVisibleYear(currentKey.split("-")[0]);
-        setSelectedMonth(currentKey);
+        setSelectedMonth(calendarMonths[idx]);
       }
     }
   }, [calendarMonths]);
@@ -135,6 +156,27 @@ const ContractPage = () => {
   if (!contract || !order) {
     return <Text>Загрузка…</Text>;
   }
+
+  // 2) Находим индекс последнего оплаченного
+  const lastPaidIndex = calendarMonths.findLastIndex((m) => m.paid);
+
+  // 3) Считаем индекс следующего
+  const nextMonthIndex = lastPaidIndex + 1;
+
+  // 4) Берём следующий месяц или null, если вышли за границы
+  const nextMonth =
+    nextMonthIndex >= 0 && nextMonthIndex < calendarMonths.length
+      ? calendarMonths[nextMonthIndex]
+      : null;
+
+  // если ни один месяц не выбран — покажем 0
+  const monthlyPaidAmount = selectedMonth?.paid ? _avgMonthlyPayment : 0;
+
+  // форматируем
+  const formattedMonthlyPaid =
+    paidDiff != 0 && nextMonth?.monthKey === selectedMonth?.monthKey
+      ? formatNumberRegex(Math.abs(paidDiff)) + " р."
+      : formatNumberRegex(monthlyPaidAmount) + " р.";
 
   return (
     <SafeAreaView style={styles.pageContainer}>
@@ -177,7 +219,7 @@ const ContractPage = () => {
         </ThemedView>
 
         <ThemedText variant="m600.16" style={styles.sectionTitle}>
-          Календарь выплат:{" "}
+          Календарь выплат:
           <ThemedText variant="m400.12" style={styles.yearText}>
             {visibleYear}
           </ThemedText>
@@ -203,13 +245,38 @@ const ContractPage = () => {
               snapToInterval={RECEIPT_ITEM_WIDTH}
               decelerationRate="fast"
             >
-              {calendarMonths.map(({ monthKey, display, paid }) => (
-                <View key={monthKey} style={styles.receiptBadge}>
-                  {paid ? <CheckCircleIcon /> : <EmptyCircleIcon />}
-                  <ThemedText variant="h8" style={styles.receiptMonthText}>
-                    {display}
+              {calendarMonths.map((item) => (
+                <TouchableOpacity
+                  onPress={() => setSelectedMonth(item)}
+                  key={item.monthKey}
+                  style={[
+                    styles.receiptBadge,
+                    selectedMonth?.monthKey === item.monthKey &&
+                      styles.receiptBadgeSelected,
+                  ]}
+                >
+                  {item.paid ? (
+                    <CheckCircleIcon
+                      strokeColor={
+                        selectedMonth?.monthKey === item.monthKey
+                          ? COLORS.BGWhite
+                          : "#000000"
+                      }
+                    />
+                  ) : (
+                    <EmptyCircleIcon />
+                  )}
+                  <ThemedText
+                    variant="h8"
+                    style={[
+                      styles.receiptMonthText,
+                      selectedMonth?.monthKey === item.monthKey &&
+                        styles.receiptMonthTextSelected,
+                    ]}
+                  >
+                    {item.display}
                   </ThemedText>
-                </View>
+                </TouchableOpacity>
               ))}
             </ScrollView>
 
@@ -227,18 +294,31 @@ const ContractPage = () => {
         <ThemedText variant="m600.12" style={styles.actualReceiptDataText}>
           {formatMonthYear()}
         </ThemedText>
+
         <PaymentRow
           label="Оплачено:"
-          amount="340 500 р."
-          date={formatDateWithYear(contract.date)}
+          amount={formattedMonthlyPaid}
+          date={
+            selectedMonth?.monthKey
+              ? formatDateWithYear(selectedMonth?.monthKey)
+              : formatDateWithYear(new Date().toISOString())
+          }
           labelStyle={{ color: COLORS.TextGreen }}
         />
+
         <PaymentRow
           label="К оплате:"
           amount={`${formatNumberRegex(_avgMonthlyPayment)} р.`}
           date={formatDateWithYear(contract.date)}
           style={styles.paymentRow}
           labelStyle={{ color: COLORS.TextRed }}
+        />
+
+        <PaymentRow
+          label={"Актуальное состояние: " + diffLabel}
+          amount={formattedDiff}
+          date={formatDateWithYear(new Date().toISOString())}
+          labelStyle={{ color: diffColor }}
         />
       </ScrollView>
     </SafeAreaView>
