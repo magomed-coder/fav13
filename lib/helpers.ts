@@ -27,11 +27,17 @@ function insertThousandsSeparator(intPart: string, sep: string = " "): string {
  * - Возвращает строку вида "1 234 567,89" (или без дробной части)
  */
 export function formatNumberRegex(
-  value: number,
+  rawValue: number | string,
   decimals: number = 0,
   thousandSep: string = " ",
   decimalSep: string = ","
 ): string {
+  const value =
+    typeof rawValue === "number"
+      ? rawValue
+      : parseFloat(rawValue.replace(/\s/g, ""));
+
+  if (!value && value !== 0) return "0";
   // 1) Округление и получение строкового представления
   const rounded = value.toFixed(decimals); // e.g. "1234567.89" или "1234568"
 

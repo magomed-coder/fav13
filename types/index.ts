@@ -106,6 +106,7 @@ export type PaymentCalendarEntry = {
   order: number;
   due_now: string;
   due_now_vat: string;
+  monthly_calendar_payment: number;
   first_payment_date: string; // consider naming them camelCase
   final_payment_date: string; // or Date if you’ll parse it immediately
   total_debt: string;

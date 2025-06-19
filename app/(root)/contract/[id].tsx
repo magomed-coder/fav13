@@ -45,7 +45,6 @@ interface ContractData {
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const RECEIPT_ITEM_WIDTH = 21 + 9 * 2;
-const _avgMonthlyPayment = 88000;
 
 const ContractPage = () => {
   const [visibleYear, setVisibleYear] = useState<string>(
@@ -79,6 +78,8 @@ const ContractPage = () => {
   );
 
   const { contract, order, receipts, paymentcalendar } = data;
+
+  const avgMonthlyPayment = paymentcalendar?.monthly_calendar_payment || 1;
 
   const totalPaid =
     receipts.reduce((sum, { payment_amount }) => {
@@ -125,7 +126,7 @@ const ContractPage = () => {
   };
 
   const calendarMonths: CalendarMonth[] = useMemo(
-    () => buildPaymentCalendar(paymentcalendar, totalPaid, _avgMonthlyPayment),
+    () => buildPaymentCalendar(paymentcalendar, totalPaid, avgMonthlyPayment),
     [paymentcalendar, totalPaid]
   );
 
@@ -170,7 +171,7 @@ const ContractPage = () => {
       : null;
 
   // если ни один месяц не выбран — покажем 0
-  const monthlyPaidAmount = selectedMonth?.paid ? _avgMonthlyPayment : 0;
+  const monthlyPaidAmount = selectedMonth?.paid ? avgMonthlyPayment : 0;
 
   // форматируем
   const formattedMonthlyPaid =
@@ -308,7 +309,7 @@ const ContractPage = () => {
 
         <PaymentRow
           label="К оплате:"
-          amount={`${formatNumberRegex(_avgMonthlyPayment)} р.`}
+          amount={`${formatNumberRegex(avgMonthlyPayment)} р.`}
           date={formatDateWithYear(contract.date)}
           style={styles.paymentRow}
           labelStyle={{ color: COLORS.TextRed }}
