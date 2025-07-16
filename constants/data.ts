@@ -81,3 +81,14 @@ export const facilities = [
     icon: icons.dog,
   },
 ];
+
+export const MIN_COST = 500_000;
+export const MAX_COST = 100_000_000;
+
+export const options = [
+  { key: "secondary", label: "Вторичное жилье" },
+  { key: "car_light", label: "Легковое авто" },
+  { key: "car_heavy", label: "Грузовое авто (техника)" },
+  { key: "new_with", label: "Новостройки (с пер. взносом)" },
+  { key: "new_without", label: "Новостройки (без пер. взноса)" },
+];

@@ -14,6 +14,7 @@ import { useUserContext } from "@/context/user-provider";
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
 import React from "react";
 import { Linking, StyleSheet, View } from "react-native";
+import { Role } from "@/types";
 
 interface SectionItem {
   title: string;
@@ -45,11 +46,6 @@ export default function CustomDrawerContent({
           onPress: () => navigation.navigate("contacts"),
           icon: <PhoneIcon />,
         },
-        {
-          title: "Шахматка",
-          onPress: () => navigation.navigate("chessboard"),
-          icon: <LayersIcon />,
-        },
       ],
     },
     {
@@ -68,6 +64,14 @@ export default function CustomDrawerContent({
       ],
     },
   ];
+
+  if (user?.user_type === Role.REALTOR) {
+    sections[0].items.push({
+      title: "Шахматка",
+      onPress: () => navigation.navigate("chessboard"),
+      icon: <LayersIcon />,
+    });
+  }
 
   return (
     <View style={styles.container}>

@@ -14,33 +14,43 @@ import { ScreenHeader } from "@/components/ScreenHeader";
 import { ThemedText } from "@/components/ThemedText";
 import { COLORS } from "@/constants/theme";
 
-import images from "@/constants/images";
 import { StatusBar } from "expo-status-bar";
+import { realEstateService } from "@/services/realEstateService";
+import { RealEstateItem, Role } from "@/types";
+import { useUserContext } from "@/context/user-provider";
 
-interface ChessboardItem {
-  id: string;
-  name: string;
-  url: string;
-}
+import { useFocusEffect, useRouter } from "expo-router";
 
 const DeveloperChessboardPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [items, setItems] = useState<ChessboardItem[]>([]);
+  const [items, setItems] = useState<RealEstateItem[]>([]);
 
-  // Моковый запрос при загрузке страницы
+  const { user } = useUserContext();
+  const router = useRouter();
+
+  // Проверяем роль и при несоответствии редиректим на главную
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!user) return;
+
+      if (user.user_type !== Role.REALTOR) {
+        router.push("/");
+      }
+    }, [user, router])
+  );
+
   useEffect(() => {
     const fetchChessboards = async () => {
       try {
-        // эмуляция задержки TODO
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        setItems(data);
+        const response = await realEstateService.getAll();
+        setItems(response);
       } catch (error) {
-        console.error("Ошибка загрузки данных шахматок:", error);
+        console.error("Ошибка загрузки шахматок:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchChessboards();
   }, []);
 
@@ -65,7 +75,7 @@ const DeveloperChessboardPage = () => {
             items.map((item, index) => (
               <TouchableOpacity
                 key={item.id}
-                onPress={() => handleLinkPress(item.url)}
+                onPress={() => handleLinkPress(item.link)}
               >
                 <ThemedText variant="m500.14" style={styles.linkText}>
                   {`${index + 1}. ${item.name}`}
@@ -105,22 +115,3 @@ const styles = StyleSheet.create({
 });
 
 export default DeveloperChessboardPage;
-
-// моковые данные
-const data: ChessboardItem[] = [
-  {
-    id: "1",
-    name: "ЖК Солнечный",
-    url: "https://example.com/solar-chessboard",
-  },
-  {
-    id: "2",
-    name: "ЖК Лесной",
-    url: "https://example.com/forest-chessboard",
-  },
-  {
-    id: "3",
-    name: "ЖК Речной",
-    url: "https://example.com/river-chessboard",
-  },
-];

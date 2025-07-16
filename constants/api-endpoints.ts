@@ -3,4 +3,5 @@ export enum API_ENDPOINTS {
   REFRESH_TOKEN = "/api/token/refresh/",
   CHANGE_PASSWORD = "/api/change-password/",
   USER_INFO = "/api/me/",
+  REAL_ESTATE_LIST = "/api/realestate/",
 }

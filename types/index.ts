@@ -112,8 +112,14 @@ export type PaymentCalendarEntry = {
   total_debt: string;
 };
 
+export enum Role {
+  USER = "user",
+  REALTOR = "realtor",
+}
+
 export type UserData = {
   username: string;
+  user_type: Role;
   avatarUrl?: string;
   userNameInDevice?: string;
   contracts: Contract[];
@@ -121,3 +127,10 @@ export type UserData = {
   paymentcalendar: PaymentCalendarEntry[];
   receipts: Receipt[];
 };
+
+export interface RealEstateItem {
+  id: number;
+  name: string;
+  description: string;
+  link: string;
+}
