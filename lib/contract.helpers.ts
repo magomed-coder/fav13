@@ -62,11 +62,12 @@ export function buildPaymentCalendar(
   const dueNowNum = +entry.due_now;
 
   // console.log({ scheduledMonths, currentIdx, dueNowNum });
-  // console.log({ calendar });
+  // console.log({ dueNowNum });
 
   // 4a. Underpaid?
   if (totalPaid < dueNowNum) {
     const deficit = dueNowNum - totalPaid;
+    // console.log("totalPaid < dueNowNum", deficit);
     const monthsBehind = Math.ceil(deficit / avgMonthlyPayment);
 
     for (let i = 0; i < monthsBehind; i++) {
@@ -82,6 +83,7 @@ export function buildPaymentCalendar(
   if (totalPaid > dueNowNum) {
     const surplus = totalPaid - dueNowNum;
     const extraMonths = Math.floor(surplus / avgMonthlyPayment);
+    // console.log("totalPaid > dueNowNum", surplus);
 
     // Flip the next `extraMonths` scheduled months after today
     for (let i = 1; i <= extraMonths; i++) {
@@ -93,7 +95,7 @@ export function buildPaymentCalendar(
     // console.log({ calendar });
     return calendar;
   }
-
+  // console.log("Exactly on schedule");
   // 4c. Exactly on schedule?
   return calendar;
 }

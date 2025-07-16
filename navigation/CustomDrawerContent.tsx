@@ -1,4 +1,5 @@
 import { CalculatorIcon } from "@/assets/svg/CalculatorIcon";
+import { LayersIcon } from "@/assets/svg/LayersIcon";
 import { FingerIcon } from "@/assets/svg/FingerIcon";
 import { LocationIcon } from "@/assets/svg/LocationIcon";
 import { PhoneIcon } from "@/assets/svg/PhoneIcon";
@@ -31,20 +32,23 @@ export default function CustomDrawerContent({
       items: [
         {
           title: "Калькулятор",
-          onPress: () =>
-            Linking.openURL("https://favorit-today.ru/kalkulyator/"),
+          onPress: () => navigation.navigate("calculator"),
           icon: <CalculatorIcon />,
         },
         {
           title: "О компании",
-          onPress: () =>
-            Linking.openURL("https://favorit-today.ru/o-kompanii/"),
+          onPress: () => navigation.navigate("about"),
           icon: <LocationIcon />,
         },
         {
           title: "Контакты",
           onPress: () => navigation.navigate("contacts"),
           icon: <PhoneIcon />,
+        },
+        {
+          title: "Шахматка",
+          onPress: () => navigation.navigate("chessboard"),
+          icon: <LayersIcon />,
         },
       ],
     },

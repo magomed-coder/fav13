@@ -26,11 +26,12 @@ import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { useNavigation } from "@react-navigation/native";
 
 import images from "@/constants/images";
-import { getImageHeight } from "@/hooks/imageUtils";
+
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 
 import { useUserContext } from "@/context/user-provider";
+import { getImageHeight } from "@/lib/imageUtils";
 
 const Home: React.FC = () => {
   const { user } = useUserContext();
@@ -105,7 +106,7 @@ const Home: React.FC = () => {
         resizeMode="cover"
         style={[
           styles.backgroundImage,
-          { width, height: +imageHeight_1, bottom: insets.bottom + 80 },
+          { width, height: imageHeight_1, bottom: insets.bottom + 80 },
         ]}
       />
       <Image
@@ -113,7 +114,7 @@ const Home: React.FC = () => {
         resizeMode="cover"
         style={[
           styles.backgroundImage_2,
-          { width, height: +imageHeight_2, bottom: insets.bottom + 100 },
+          { width, height: imageHeight_2, bottom: insets.bottom + 100 },
         ]}
       />
 

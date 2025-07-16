@@ -53,14 +53,12 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   };
 
   useEffect(() => {
-    // console.log("fetchUser");
     fetchUser();
   }, []);
 
   const isLogged = !!user?.username;
 
-  console.log("user");
-  console.log(user);
+  console.log("user", user);
 
   return (
     <UserContext.Provider

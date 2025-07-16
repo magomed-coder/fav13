@@ -92,9 +92,10 @@ const ContractPage = () => {
     : 0;
 
   const residentialComplex = extractResidentialComplex(order?.nomenclature);
+  const currentDebt = Number(paymentcalendar?.due_now) || 0;
 
   // 2) разница
-  const paidDiff = totalPaid - Number(paymentcalendar?.due_now);
+  const paidDiff = totalPaid - currentDebt;
 
   // 3) формируем строковое представление с разделителями
   const formattedDiff = formatNumberRegex(Math.abs(paidDiff)) + " р.";
@@ -178,6 +179,8 @@ const ContractPage = () => {
     paidDiff != 0 && nextMonth?.monthKey === selectedMonth?.monthKey
       ? formatNumberRegex(Math.abs(paidDiff)) + " р."
       : formatNumberRegex(monthlyPaidAmount) + " р.";
+
+  console.log({ totalPaid, totalDebt, paidDiff, currentDebt });
 
   return (
     <SafeAreaView style={styles.pageContainer}>
