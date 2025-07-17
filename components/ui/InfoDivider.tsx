@@ -12,6 +12,8 @@ interface InfoDividerProps {
   leftTextStyle?: StyleProp<TextStyle>;
   /** Индивидуальные стили для правого текста */
   rightTextStyle?: StyleProp<TextStyle>;
+  /** Показывать разделитель между текстами */
+  showDivider?: boolean;
 }
 
 /**
@@ -25,6 +27,7 @@ const InfoDivider: React.FC<InfoDividerProps> = ({
   textStyle,
   leftTextStyle,
   rightTextStyle,
+  showDivider = true,
 }) => (
   <View style={styles.container}>
     <View style={styles.textContainer}>
@@ -32,9 +35,21 @@ const InfoDivider: React.FC<InfoDividerProps> = ({
         {left}
       </ThemedText>
     </View>
-    <View style={styles.divider} />
-    <View style={styles.textContainer}>
-      <ThemedText variant="m400.12" style={[textStyle, rightTextStyle]}>
+    <View
+      style={[
+        styles.divider,
+        !showDivider && { borderColor: "transparent", marginHorizontal: 0 },
+      ]}
+    />
+    <View style={[styles.textContainer, !showDivider && { width: "55%" }]}>
+      <ThemedText
+        variant="m400.12"
+        style={[
+          textStyle,
+          rightTextStyle,
+          !showDivider && { textAlign: "right" },
+        ]}
+      >
         {right}
       </ThemedText>
     </View>

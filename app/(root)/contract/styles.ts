@@ -98,6 +98,24 @@ const styles = StyleSheet.create({
   paymentRow: { backgroundColor: "rgba(236, 247, 255, 1)" },
   actualReceiptTopText: {},
   receiptDataText: {},
+
+  bottomButtonWrapper: {
+    marginTop: 30,
+    alignItems: "center",
+  },
+
+  bottomButton: {
+    backgroundColor: COLORS.BGDeepBlue,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 15,
+    width: "100%",
+  },
+
+  bottomButtonText: {
+    color: COLORS.BGWhite,
+    textAlign: "center",
+  },
 });
 
 export default styles;

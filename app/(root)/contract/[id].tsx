@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   Dimensions,
   NativeScrollEvent,
@@ -51,6 +51,7 @@ const ContractPage = () => {
     new Date().getFullYear().toString()
   );
 
+  const router = useRouter();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { user } = useUserContext();
 
@@ -324,6 +325,24 @@ const ContractPage = () => {
           date={formatDateWithYear(new Date().toISOString())}
           labelStyle={{ color: diffColor }}
         />
+
+        <View style={styles.bottomButtonWrapper}>
+          <TouchableOpacity
+            style={styles.bottomButton}
+            onPress={() => {
+              if (!id) return;
+
+              router.push({
+                pathname: "/act/[id]",
+                params: { id },
+              });
+            }}
+          >
+            <ThemedText variant="m600.14" style={styles.bottomButtonText}>
+              Акт сверки
+            </ThemedText>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

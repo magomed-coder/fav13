@@ -92,3 +92,12 @@ export const options = [
   { key: "new_with", label: "Новостройки (с пер. взносом)" },
   { key: "new_without", label: "Новостройки (без пер. взноса)" },
 ];
+
+interface OptionConfig {
+  key: string;
+  label: string;
+  minDownPercent: number; // минимальный % первого взноса
+  minYears: number; // минимальный срок (в годах)
+  maxYears: number; // максимальный срок (в годах)
+  markupRates: number[]; // наценка (%) для каждого года рассрочки
+}
