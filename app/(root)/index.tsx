@@ -97,7 +97,9 @@ const Home: React.FC = () => {
           <StatsSection dealsCount={dealsCount} totalPaid={totalPaid} />
         </ThemedView>
 
-        <ContractsSection contracts={user?.contracts ?? []} />
+        {user?.contracts.length && (
+          <ContractsSection contracts={user?.contracts ?? []} />
+        )}
       </ScrollView>
 
       {/* Выносим изображение из ScrollView */}
@@ -129,7 +131,7 @@ const Home: React.FC = () => {
     </SafeAreaView>
   );
 };
-const { width } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

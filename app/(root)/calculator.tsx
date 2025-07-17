@@ -16,10 +16,11 @@ import { ArrowIcon } from "@/assets/svg/ArrowIcon";
 import { Picker } from "@react-native-picker/picker";
 import InfoDivider from "@/components/ui/InfoDivider";
 import { MAX_COST, MIN_COST, options } from "@/constants/data";
+import useDebouncedCallback from "@/hooks/useDebouncedCallback";
 
 const CalculatorPage: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<string>(options[0].key);
-  const [rawCost, setRawCost] = useState<string>("");
+  const [rawCost, setRawCost] = useState<string>("0");
   const [displayCost, setDisplayCost] = useState<string>("");
 
   const [downPercent, setDownPercent] = useState<number>(20);
@@ -107,9 +108,9 @@ const CalculatorPage: React.FC = () => {
 
   const hasInitialPayment = selectedOption !== "new_without";
 
-  const handleSliderChange = (value: number) => {
-    setDownPercent(Math.round(value));
-  };
+  const debouncedRecalc = useDebouncedCallback((value: number) => {
+    setDownPercent(value);
+  }, 100);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -174,8 +175,7 @@ const CalculatorPage: React.FC = () => {
               maximumValue={50}
               step={1}
               value={downPercent}
-              onValueChange={handleSliderChange}
-              onSlidingComplete={handleSliderChange}
+              onValueChange={debouncedRecalc}
               style={styles.slider}
               minimumTrackTintColor={COLORS.BGDarkBlue}
               maximumTrackTintColor={COLORS.BGGrey}
@@ -228,7 +228,7 @@ const CalculatorPage: React.FC = () => {
           <View style={styles.resultTop}>
             <InfoDivider
               left="Стоимость"
-              right={`${formatWithSpaces(rawCost)} руб.`}
+              right={`${formatWithSpacesInfo(rawCost)} руб.`}
             />
             {hasInitialPayment && (
               <InfoDivider
@@ -244,27 +244,22 @@ const CalculatorPage: React.FC = () => {
           <View style={styles.resultBottom}>
             <InfoDivider
               left={"Сумма договора рассрочки:"}
-              right={`${results.contractSum.toLocaleString(undefined, {
-                maximumFractionDigits: 0,
-              })}`}
-              textStyle={styles.resultBottomText}
+              right={`${formatWithSpacesInfo(
+                results.contractSum.toString()
+              )} руб.`}
             />
             {hasInitialPayment && (
               <InfoDivider
                 left={"Первоначальный платеж:"}
-                right={`${results.firstPayment.toLocaleString(undefined, {
-                  maximumFractionDigits: 0,
-                })}`}
-                textStyle={styles.resultBottomText}
+                right={`${formatWithSpacesInfo(
+                  results.firstPayment.toString()
+                )} руб.`}
               />
             )}
 
             <InfoDivider
               left={"Ежемесячный платеж:"}
-              right={`${results.monthly.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-              })}`}
-              textStyle={styles.resultBottomText}
+              right={`${formatWithSpacesInfo(results.monthly.toString())} руб.`}
             />
           </View>
         </View>
@@ -275,7 +270,7 @@ const CalculatorPage: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { backgroundColor: COLORS.BGWhite, flex: 1 },
-  content: { marginHorizontal: 16 },
+  content: { marginHorizontal: 16, paddingBottom: 30 },
   padding: { marginHorizontal: 16 },
 
   sectionLabel: {
@@ -382,26 +377,32 @@ function formatWithSpaces(value: string): string {
   return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
+function formatWithSpacesInfo(value: string): string {
+  // 1) Заменяем запятые на точки, чтобы parseFloat корректно понял десятичную часть
+  const normalized = value.replace(/,/g, ".");
+
+  // 2) Парсим число
+  const num = parseFloat(normalized);
+  if (isNaN(num)) {
+    // если не число — возвращаем пустую строку (или можно вернуть value)
+    return "";
+  }
+
+  // 3) Отрезаем до двух знаков после запятой, приводим к строке «1234.56»
+  const [intPart, decPart] = num.toFixed(2).split(".");
+
+  // 4) Форматируем целую часть: каждую группу из трёх ставим перед ней точку
+  const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  // 5) Склеиваем через запятую
+  return `${formattedInt},${decPart}`;
+}
+
 function formatYears(years: number): string {
   if (years === 1) return `${years} год`;
   if (years > 4) return `${years} лет`;
   return `${years} года`;
 }
-
-const getMaxYears = (option: string): number => {
-  switch (option) {
-    case "car_light":
-    case "car_heavy":
-      return 3;
-    case "secondary":
-      return 4;
-    case "new_with":
-    case "new_without":
-      return 6;
-    default:
-      return 4;
-  }
-};
 
 interface OptionConfig {
   key: string;
@@ -448,7 +449,7 @@ const optionConfigs: OptionConfig[] = [
   {
     key: "new_with",
     label: "Новостройки (с пер. взносом)",
-    minDownPercent: 0, // любая сумма >0%
+    minDownPercent: 0,
     minYears: 1,
     maxYears: 6, // теперь до 6 лет
     markupRates: [0, 15, 25, 30, 35, 40], // также 6 значений
