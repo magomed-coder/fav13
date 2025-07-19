@@ -139,12 +139,7 @@ const CalculatorPage: React.FC = () => {
             selectionColor={COLORS.TextBlack}
           >
             {options.map((opt) => (
-              <Picker.Item
-                key={opt.key}
-                label={opt.label}
-                value={opt.key}
-                color={COLORS.TextBlack}
-              />
+              <Picker.Item key={opt.key} label={opt.label} value={opt.key} />
             ))}
           </Picker>
         </View>
