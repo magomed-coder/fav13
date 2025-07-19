@@ -136,9 +136,15 @@ const CalculatorPage: React.FC = () => {
             mode="dropdown"
             style={styles.picker}
             itemStyle={styles.pickerItem}
+            selectionColor={COLORS.TextBlack}
           >
             {options.map((opt) => (
-              <Picker.Item key={opt.key} label={opt.label} value={opt.key} />
+              <Picker.Item
+                key={opt.key}
+                label={opt.label}
+                value={opt.key}
+                color={COLORS.TextBlack}
+              />
             ))}
           </Picker>
         </View>
@@ -153,6 +159,7 @@ const CalculatorPage: React.FC = () => {
           onChangeText={onChangeText}
           onEndEditing={onEndEditing}
           placeholder="Введите сумму"
+          placeholderTextColor={COLORS.TextGreyLight}
         />
         <ThemedText variant="m400.10" style={styles.helper}>
           Мин: 500.000 руб. - Макс: 100.000.000 руб.
@@ -286,7 +293,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   picker: { height: 55 },
-  pickerItem: { fontFamily: FONTS.MontserratMedium, fontSize: 14 },
+  pickerItem: {},
   blueLabel: {
     color: COLORS.TextBlue,
     marginBottom: 6,
