@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 10,
   },
-  picker: { height: 55 },
+  picker: { height: 55, color: COLORS.TextBlack },
   pickerItem: {},
   blueLabel: {
     color: COLORS.TextBlue,
