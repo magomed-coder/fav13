@@ -138,12 +138,7 @@ const CalculatorPage: React.FC = () => {
             itemStyle={styles.pickerItem}
           >
             {options.map((opt) => (
-              <Picker.Item
-                key={opt.key}
-                label={opt.label}
-                value={opt.key}
-                color={COLORS.TextBlack}
-              />
+              <Picker.Item key={opt.key} label={opt.label} value={opt.key} />
             ))}
           </Picker>
         </View>
@@ -291,7 +286,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 10,
   },
-  picker: { height: 55, color: COLORS.TextBlack },
+  picker: {
+    height: 55,
+    color: COLORS.TextBlack,
+    backgroundColor: COLORS.BGWhite,
+  },
   pickerItem: {},
   blueLabel: {
     color: COLORS.TextBlue,
