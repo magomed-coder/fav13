@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScreenHeader } from "@/components/ScreenHeader";
@@ -13,13 +14,14 @@ import { COLORS, FONTS } from "@/constants/theme";
 import { StatusBar } from "expo-status-bar";
 import Slider from "@react-native-community/slider";
 import { ArrowIcon } from "@/assets/svg/ArrowIcon";
-import { Picker } from "@react-native-picker/picker";
+
 import InfoDivider from "@/components/ui/InfoDivider";
 import { MAX_COST, MIN_COST, options } from "@/constants/data";
 import useDebouncedCallback from "@/hooks/useDebouncedCallback";
+import Dropdown, { OptionItem } from "@/components/ui/CustomDropdown";
 
 const CalculatorPage: React.FC = () => {
-  const [selectedOption, setSelectedOption] = useState<string>(options[0].key);
+  const [selectedOption, setSelectedOption] = useState<OptionItem>(options[0]);
   const [rawCost, setRawCost] = useState<string>("0");
   const [displayCost, setDisplayCost] = useState<string>("");
 
@@ -32,7 +34,7 @@ const CalculatorPage: React.FC = () => {
   });
 
   const currentConfig = useMemo(
-    () => optionConfigs.find((c) => c.key === selectedOption)!,
+    () => optionConfigs.find((c) => c.key === selectedOption.key)!,
     [selectedOption]
   );
 
@@ -49,7 +51,7 @@ const CalculatorPage: React.FC = () => {
         : ty
     );
 
-    if (selectedOption === "new_without") {
+    if (selectedOption.key === "new_without") {
       setDownPercent(0);
     }
   }, [currentConfig]);
@@ -70,7 +72,7 @@ const CalculatorPage: React.FC = () => {
     let contractSum = grossSum - first;
     let grossSum1 = 0;
 
-    if (selectedOption === "new_with") {
+    if (selectedOption.key === "new_with") {
       first = (price * downPercent) / 100;
       price = price - first;
       grossSum1 = price + price * (markupRate / 100);
@@ -106,7 +108,7 @@ const CalculatorPage: React.FC = () => {
     }
   };
 
-  const hasInitialPayment = selectedOption !== "new_without";
+  const hasInitialPayment = selectedOption.key !== "new_without";
 
   const debouncedRecalc = useDebouncedCallback((value: number) => {
     setDownPercent(value);
@@ -114,9 +116,10 @@ const CalculatorPage: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="dark" />
-      <ScreenHeader showBack style={styles.padding} />
       <ScrollView contentContainerStyle={styles.content}>
+        <StatusBar style="dark" />
+        <ScreenHeader showBack />
+
         <ThemedText variant="m600.16" style={styles.mainLabel}>
           Калькулятор
         </ThemedText>
@@ -129,19 +132,13 @@ const CalculatorPage: React.FC = () => {
         <ThemedText variant="m600.12" style={styles.blueLabel}>
           Тип имущества
         </ThemedText>
-        <View style={styles.pickerWrapper}>
-          <Picker
-            selectedValue={selectedOption}
-            onValueChange={setSelectedOption}
-            mode="dropdown"
-            style={styles.picker}
-            itemStyle={styles.pickerItem}
-          >
-            {options.map((opt) => (
-              <Picker.Item key={opt.key} label={opt.label} value={opt.key} />
-            ))}
-          </Picker>
-        </View>
+
+        <Dropdown
+          data={options}
+          onChange={setSelectedOption}
+          selectedValue={selectedOption}
+          placeholder="sss"
+        />
 
         <ThemedText variant="m600.12" style={styles.blueLabel}>
           Стоимость
@@ -177,7 +174,10 @@ const CalculatorPage: React.FC = () => {
               step={1}
               value={downPercent}
               onValueChange={debouncedRecalc}
-              style={styles.slider}
+              style={[
+                styles.slider,
+                Platform.OS !== "ios" && { marginHorizontal: -10 },
+              ]}
               minimumTrackTintColor={COLORS.BGDarkBlue}
               maximumTrackTintColor={COLORS.BGGrey}
               thumbTintColor={COLORS.BGDarkBlue}
@@ -272,7 +272,6 @@ const CalculatorPage: React.FC = () => {
 const styles = StyleSheet.create({
   container: { backgroundColor: COLORS.BGWhite, flex: 1 },
   content: { marginHorizontal: 16, paddingBottom: 30 },
-  padding: { marginHorizontal: 16 },
 
   sectionLabel: {
     color: COLORS.TextBlue,
@@ -287,11 +286,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   picker: {
-    height: 55,
+    // height: 55,
     color: COLORS.TextBlack,
     backgroundColor: COLORS.BGWhite,
   },
-  pickerItem: {},
+  pickerItem: { height: 55 },
   blueLabel: {
     color: COLORS.TextBlue,
     marginBottom: 6,
@@ -329,7 +328,6 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     paddingHorizontal: 0,
     marginVertical: 0,
-    marginHorizontal: -10,
   },
   helper: {
     color: COLORS.TextBlack,

@@ -57,6 +57,8 @@ const Home: React.FC = () => {
   );
   const insets = useSafeAreaInsets();
 
+  const isContractsExist = user?.contracts && user?.contracts.length > 0;
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
@@ -65,40 +67,41 @@ const Home: React.FC = () => {
         contentContainerStyle={styles.containerScroll}
       >
         <ScreenHeader />
-        <ThemedView style={styles.header}>
-          <TouchableOpacity
-            style={styles.profileButton}
-            onPress={() => navigation.navigate("profile")}
-          >
-            <AvatarCircle user={user} />
-            <View style={styles.profileInfo}>
-              <ThemedText
-                variant="h1"
-                style={styles.username}
-                numberOfLines={1}
-                ellipsizeMode="tail"
+        {isContractsExist && (
+          <>
+            <ThemedView style={styles.header}>
+              <TouchableOpacity
+                style={styles.profileButton}
+                onPress={() => navigation.navigate("profile")}
               >
-                {user?.userNameInDevice}
-              </ThemedText>
-              <View>
-                <LinearGradient
-                  colors={[
-                    COLORS.GradientStartLightGreen,
-                    COLORS.GradientEndGreen,
-                  ]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={styles.gradient}
-                />
-              </View>
-            </View>
-          </TouchableOpacity>
+                <AvatarCircle user={user} />
+                <View style={styles.profileInfo}>
+                  <ThemedText
+                    variant="h1"
+                    style={styles.username}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {user?.userNameInDevice}
+                  </ThemedText>
+                  <View>
+                    <LinearGradient
+                      colors={[
+                        COLORS.GradientStartLightGreen,
+                        COLORS.GradientEndGreen,
+                      ]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}
+                      style={styles.gradient}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
 
-          <StatsSection dealsCount={dealsCount} totalPaid={totalPaid} />
-        </ThemedView>
-
-        {user?.contracts.length && (
-          <ContractsSection contracts={user?.contracts ?? []} />
+              <StatsSection dealsCount={dealsCount} totalPaid={totalPaid} />
+            </ThemedView>
+            <ContractsSection contracts={user?.contracts ?? []} />
+          </>
         )}
       </ScrollView>
 
