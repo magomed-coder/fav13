@@ -20,6 +20,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { useUserContext } from "@/context/user-provider";
 
+import Constants from "expo-constants";
+
 interface SettingsItemProp {
   icon: ImageSourcePropType;
   title: string;
@@ -70,7 +72,6 @@ const Profile = () => {
   };
 
   const router = useRouter();
-  // router.push router.replace
 
   const handleBookings = undefined;
   const handlePayments = undefined;
@@ -96,6 +97,8 @@ const Profile = () => {
     { title: "Центр поддержки", icon: icons.info, onPress: handleSupport },
     { title: "Пригласить друзей", icon: icons.people, onPress: handleInvite },
   ];
+
+  const appVersion = Constants.expoConfig?.version;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -146,6 +149,12 @@ const Profile = () => {
             onPress={handleLogout}
           />
         </View>
+
+        <View style={styles.versionContainer}>
+          <ThemedText variant="r400.13" style={styles.versionText}>
+            Версия {appVersion}
+          </ThemedText>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -157,7 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
   },
   scrollContainer: {
-    paddingBottom: 30,
+    paddingBottom: 40,
     paddingHorizontal: 16,
   },
   header: {
@@ -244,6 +253,14 @@ const styles = StyleSheet.create({
   },
   dangerText: {
     color: "#FF3B30",
+  },
+  versionContainer: {
+    marginTop: 40,
+    alignItems: "center",
+  },
+  versionText: {
+    color: "#999",
+    textAlign: "center",
   },
 });
 
