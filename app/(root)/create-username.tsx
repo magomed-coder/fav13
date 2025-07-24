@@ -18,6 +18,7 @@ import { userStorage } from "@/services/userService";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useUserContext } from "@/context/user-provider";
+import { ScreenHeader } from "@/components/ScreenHeader";
 
 const CreateUserNamePage = () => {
   const [username, setUsername] = useState("");
@@ -53,10 +54,10 @@ const CreateUserNamePage = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
-
+      <ScreenHeader showBack />
       <KeyboardAvoidingView
         style={styles.content}
-        behavior="padding"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
       >
         <View style={styles.logoWrapper}>

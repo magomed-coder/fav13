@@ -17,6 +17,7 @@ import { COLORS } from "@/constants/theme";
 import { authService } from "@/services/authService";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { ScreenHeader } from "@/components/ScreenHeader";
 
 const ChangePasswordPage = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -71,9 +72,10 @@ const ChangePasswordPage = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
+      <ScreenHeader showBack />
       <KeyboardAvoidingView
         style={styles.content}
-        behavior="padding"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
       >
         <View style={styles.logoWrapper}>
