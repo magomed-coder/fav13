@@ -56,8 +56,6 @@ export default function Dropdown({
           heightOfComponent +
           (Platform.OS === "android" ? 3 : heightOfComponent + 10);
 
-        console.log(JSON.stringify(layout, null, 2));
-
         setTop(finalValue);
       }}
       style={styles.wrapper}

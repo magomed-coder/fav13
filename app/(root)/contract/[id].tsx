@@ -181,8 +181,6 @@ const ContractPage = () => {
       ? formatNumberRegex(Math.abs(paidDiff)) + " р."
       : formatNumberRegex(monthlyPaidAmount) + " р.";
 
-  console.log({ totalPaid, totalDebt, paidDiff, currentDebt });
-
   return (
     <SafeAreaView style={styles.pageContainer}>
       <StatusBar style="dark" />
